@@ -1,8 +1,8 @@
 module event_generator (
     input clk,            // Clock di sistema
     input rst,            // Reset asincrono
-    output reg [31:0] data_out,  // 
-    output reg valid      // 
+    output reg [31:0] data_out,  // Dati in output del rivelatore fittizio 
+    output reg valid      //  enable dell'output 
 );
 
     reg [31:0] counter;
