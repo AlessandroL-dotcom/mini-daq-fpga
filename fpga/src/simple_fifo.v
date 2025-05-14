@@ -1,4 +1,4 @@
-simple_fifo #(
+simple_fifo#(
     parameter DATA_WIDHT = 32,
     parameter DEPTH = 16
 ) (
