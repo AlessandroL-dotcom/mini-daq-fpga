@@ -1,4 +1,4 @@
-simple_fifo#(
+simple_fifo #(
     parameter DATA_WIDHT = 32,
     parameter DEPTH = 16
 ) (
@@ -67,7 +67,7 @@ simple_fifo#(
               count <= count + 1;
             end 
             //lettura
-            f (rd_en && !empty) begin
+            if (rd_en && !empty) begin
                 data_out <= mem[rd_ptr];  // Legge il dato dalla FIFO
                 rd_ptr <= rd_ptr + 1;     // Incrementa il puntatore di lettura
                 count <= count - 1;       // Diminuisce numero di elementi
