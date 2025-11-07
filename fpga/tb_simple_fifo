@@ -1,0 +1,76 @@
+`timescale 1ns/1ps
+
+module tb_simple_fifo;
+
+  // parametri:aggiornamento farlo con parametri varib.
+  localparam DATA_WIDTH = 8;
+  localparam DEPTH = 16;
+
+  // segnali
+  reg clk, rst;
+  reg wr_en, rd_en;
+  reg [DATA_WIDTH-1:0] data_in;
+  wire [DATA_WIDTH-1:0] data_out;
+  wire full, empty;
+
+  // istanza DUT
+  simple_fifo #(
+    .DATA_WIDTH(DATA_WIDTH),
+    .DEPTH(DEPTH)
+  ) uut (
+    .clk(clk),
+    .wr_en(wr_en),
+    .rd_en(rd_en),
+    .data_in(data_in),
+    .rst(rst),
+    .data_out(data_out),
+    .full(full),
+    .empty(empty)
+  );
+
+  // clock: 10 ns periodo
+  always #5 clk = ~clk;
+
+  // stimoli
+  initial begin
+    // inizializzazioni
+    clk = 0;
+    rst = 1;
+    wr_en = 0;
+    rd_en = 0;
+    data_in = 0;
+
+    // reset per qualche ciclo
+    #20 rst = 0;
+
+    // scrittura di 4 dati
+    repeat (4) begin
+      @(posedge clk);
+      wr_en = 1;
+      data_in = data_in + 1;
+    end
+    @(posedge clk);
+    wr_en = 0;
+
+    // lettura dei 4 dati 
+    #10;
+    repeat (4) begin
+      @(posedge clk);
+      rd_en = 1;
+      @(posedge clk);
+      $display("Letto: %0d", data_out);
+    end
+    rd_en = 0;
+
+   
+    #20;
+    $finish;
+  end
+
+  // Dump 
+  initial begin
+    $dumpfile("fifo_min.vcd");
+    $dumpvars(0, tb_simple_fifo);
+  end
+
+endmodule
